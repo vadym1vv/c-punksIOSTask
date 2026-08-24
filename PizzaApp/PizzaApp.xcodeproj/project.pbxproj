@@ -10,6 +10,9 @@
 		9340D65D303C3FD50075A167 /* ProductView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9340D65C303C3FD50075A167 /* ProductView.swift */; };
 		9340D65F303C4EE00075A167 /* PizzaImgPreviewComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9340D65E303C4EE00075A167 /* PizzaImgPreviewComponent.swift */; };
 		9340D661303C505B0075A167 /* URLImgComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9340D660303C505B0075A167 /* URLImgComponent.swift */; };
+		9340D663303C88A10075A167 /* ImagePreloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9340D662303C88A10075A167 /* ImagePreloader.swift */; };
+		9340D665303C8AD50075A167 /* ProductDetailsComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9340D664303C8AD50075A167 /* ProductDetailsComponent.swift */; };
+		9340D667303C8C5B0075A167 /* GlobalConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9340D666303C8C5B0075A167 /* GlobalConstant.swift */; };
 		93C9F58E303C1CB000B1082D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 93C9F58A303C1CB000B1082D /* Assets.xcassets */; };
 		93C9F590303C1CB000B1082D /* PizzaAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C9F58C303C1CB000B1082D /* PizzaAppApp.swift */; };
 		93C9F597303C1CF900B1082D /* APIEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93C9F596303C1CF900B1082D /* APIEndpoint.swift */; };
@@ -30,6 +33,9 @@
 		9340D65C303C3FD50075A167 /* ProductView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductView.swift; sourceTree = "<group>"; };
 		9340D65E303C4EE00075A167 /* PizzaImgPreviewComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PizzaImgPreviewComponent.swift; sourceTree = "<group>"; };
 		9340D660303C505B0075A167 /* URLImgComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImgComponent.swift; sourceTree = "<group>"; };
+		9340D662303C88A10075A167 /* ImagePreloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePreloader.swift; sourceTree = "<group>"; };
+		9340D664303C8AD50075A167 /* ProductDetailsComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsComponent.swift; sourceTree = "<group>"; };
+		9340D666303C8C5B0075A167 /* GlobalConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
 		93C9F57C303C1C7200B1082D /* PizzaApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PizzaApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		93C9F58A303C1CB000B1082D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		93C9F58C303C1CB000B1082D /* PizzaAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PizzaAppApp.swift; sourceTree = "<group>"; };
@@ -106,6 +112,7 @@
 				93C9F640303C379900B1082D /* CircularButtonLabel.swift */,
 				9340D65E303C4EE00075A167 /* PizzaImgPreviewComponent.swift */,
 				9340D660303C505B0075A167 /* URLImgComponent.swift */,
+				9340D664303C8AD50075A167 /* ProductDetailsComponent.swift */,
 			);
 			path = ViewComponent;
 			sourceTree = "<group>";
@@ -115,6 +122,7 @@
 			children = (
 				93C9F63A303C2E7E00B1082D /* EnumModel */,
 				93C9F598303C1D2500B1082D /* PizzaResponse.swift */,
+				9340D666303C8C5B0075A167 /* GlobalConstant.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -124,6 +132,7 @@
 			children = (
 				93C9F59A303C1F0200B1082D /* ContentViewModel.swift */,
 				93C9F595303C1CDE00B1082D /* API */,
+				9340D662303C88A10075A167 /* ImagePreloader.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -234,11 +243,14 @@
 				93C9F641303C379900B1082D /* CircularButtonLabel.swift in Sources */,
 				93C9F597303C1CF900B1082D /* APIEndpoint.swift in Sources */,
 				93C9F63C303C2F2700B1082D /* PreloaderView.swift in Sources */,
+				9340D665303C8AD50075A167 /* ProductDetailsComponent.swift in Sources */,
 				9340D65D303C3FD50075A167 /* ProductView.swift in Sources */,
 				93C9F590303C1CB000B1082D /* PizzaAppApp.swift in Sources */,
 				93C9F637303C29EC00B1082D /* FontEnum.swift in Sources */,
 				93C9F599303C1D2500B1082D /* PizzaResponse.swift in Sources */,
 				93C9F643303C3B9100B1082D /* IconEnum.swift in Sources */,
+				9340D663303C88A10075A167 /* ImagePreloader.swift in Sources */,
+				9340D667303C8C5B0075A167 /* GlobalConstant.swift in Sources */,
 				93C9F639303C2E2D00B1082D /* ColorEnum.swift in Sources */,
 				93C9F63E303C320600B1082D /* TopBarNavigationComponent.swift in Sources */,
 				93C9F59B303C1F0200B1082D /* ContentViewModel.swift in Sources */,

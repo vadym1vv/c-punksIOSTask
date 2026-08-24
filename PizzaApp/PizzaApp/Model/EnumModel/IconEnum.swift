@@ -8,5 +8,5 @@
 import Foundation
 
 enum IconEnum: String {
-    case arrowLeft, bananaForScale, minus, plus, preloaderImg, selected
+    case arrowLeft, bananaForScale, minus, plus, preloaderImg, selected, magnify
 }

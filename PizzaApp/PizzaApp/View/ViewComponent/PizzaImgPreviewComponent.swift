@@ -62,6 +62,11 @@ struct PizzaImgPreviewComponent: View {
                     .scaleEffect(
                         position == 0 ? 1 : sideScale
                     )
+                    .overlay {
+                        if (position == 0) {
+                            Image(IconEnum.magnify.rawValue)
+                        }
+                    }
             }
             .buttonStyle(.plain)
             .offset(

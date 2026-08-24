@@ -22,16 +22,24 @@ class ContentViewModel: ObservableObject {
     }
     
     func fetchPizzas() {
-        self.isLoading = true
-        service.fetch(endpoint: .pizzas, type: PizzaResponse.self)
-            .sink {[weak self] in
-                self?.handleCompletion($0)
-            }
-        receiveValue: { [weak self] pizzaModel in
-            self?.pizza = pizzaModel.pizzas
+            self.isLoading = true
+            
+            service.fetch(endpoint: .pizzas, type: PizzaResponse.self)
+                .flatMap { response -> AnyPublisher<PizzaResponse, Error> in
+                    let urls = response.pizzas.compactMap { $0.imageURL }
+                    return ImagePreloader.shared.preload(urls: urls)
+                        .setFailureType(to: Error.self)
+                        .map { response }
+                        .eraseToAnyPublisher()
+                }
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] completion in
+                    self?.handleCompletion(completion)
+                } receiveValue: { [weak self] response in
+                    self?.pizza = response.pizzas
+                }
+                .store(in: &cancellables)
         }
-        .store(in: &cancellables)
-    }
     
     private func handleCompletion(_ completion: Subscribers.Completion<Error>) {
         self.isLoading = false
