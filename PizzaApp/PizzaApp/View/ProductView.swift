@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct ProductView: View {
-    @StateObject private var contentViewModel: ContentViewModel = ContentViewModel()
+    
+    @ObservedObject var contentViewModel: ContentViewModel
     
     @State private var currentPizzaIndex: Int = 0
     @State private var selectedPizzaSize: PizzaSize? = .medium
     @State private var isFullScreen: Bool = false
+    @State private var animateOnAppear: Bool = false
     
     var currentPizza: Pizza? {
         if (!contentViewModel.pizza.isEmpty && contentViewModel.pizza.count > currentPizzaIndex) {
@@ -29,57 +31,54 @@ struct ProductView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if let pizza = currentPizza?.name {
-                
-                
-                VStack {
-                    ZStack(alignment: .top) {
-                        TopBarNavigationComponent(
-                            isVisible: !isFullScreen,
-                            
-                            leadingView: Button {
-                            } label: {
-                                CircularButtonLabel(
-                                    content: Image(IconEnum.arrowLeft.rawValue)
-                                )
-                            },
-                            
-                            centerView: VStack(spacing: 0) {
-                                Text("Pizzas")
-                                    .font(FontEnum.regular10.font)
+            if animateOnAppear {
+                if let pizza = currentPizza?.name {
+                    
+                    VStack {
+                        ZStack(alignment: .top) {
+                            TopBarNavigationComponent(
+                                isVisible: !isFullScreen,
                                 
-                                Text(pizza)
-                                    .font(FontEnum.semibold24.font)
-                            },
-                            
-                            trailingView: Button {
-                            } label: {
-                                CircularButtonLabel(
-                                    content: Image(IconEnum.selected.rawValue)
-                                )
-                            }
-                        )
+                                leadingView: Button {
+                                } label: {
+                                    CircularButtonLabel(
+                                        content: Image(IconEnum.arrowLeft.rawValue)
+                                    )
+                                },
+                                
+                                centerView: VStack(spacing: 0) {
+                                    Text("Pizzas")
+                                        .font(FontEnum.regular10.font)
+                                    
+                                    Text(pizza)
+                                        .font(FontEnum.semibold24.font)
+                                },
+                                
+                                trailingView: Button {
+                                } label: {
+                                    CircularButtonLabel(
+                                        content: Image(IconEnum.selected.rawValue)
+                                    )
+                                }
+                            )
+                        }
                     }
                     
-                }
+                    if !isFullScreen {
+                        Spacer()
+                    }
+                    
+                    PizzaImgPreviewComponent(
+                        currentIndex: $currentPizzaIndex,
+                        isFullScreen: $isFullScreen,
+                        selectedPizzaSize: selectedPizzaSize, contentViewModel: contentViewModel
+                    )
+                    .padding(.bottom)
+                    
+                    if !isFullScreen {
+                        Spacer()
+                    }
                 
-                if !isFullScreen {
-                    Spacer()
-                }
-                
-                PizzaImgPreviewComponent(
-                    currentIndex: $currentPizzaIndex,
-                    isFullScreen: $isFullScreen,
-                    selectedPizzaSize: selectedPizzaSize, contentViewModel: contentViewModel
-                )
-                .padding(.bottom)
-                
-                
-                
-                if !isFullScreen {
-                    Spacer()
-                }
-                VStack {
                     if !isFullScreen {
                         Image(IconEnum.bananaForScale.rawValue)
                             .padding(.bottom)
@@ -91,18 +90,13 @@ struct ProductView: View {
                             )
                     }
                 }
-                .animation(.snappy(duration: 0.3), value: isFullScreen)
-                
-            }
-            
-            VStack {
+              
                 if let currentPizza, !isFullScreen {
                     ProductDetailsComponent(price: selectedPizzaVariant?.price, pizza: currentPizza)
                         .frame(height: UIScreen.main.bounds.height / 3)
                         .padding()
                         .transition(.move(edge: .bottom))
                 }
-                
             }
         }
         .animation(.bouncy, value: isFullScreen)
@@ -114,7 +108,7 @@ struct ProductView: View {
             Circle()
                 .overlay(alignment: .bottom) {
                     HStack(spacing: 0) {
-                        if (!isFullScreen) {
+                        if !isFullScreen && animateOnAppear {
                             HStack(spacing: 0) {
                                 Button {
                                     withAnimation {
@@ -158,12 +152,14 @@ struct ProductView: View {
                 .offset(y: -150)
                 .zIndex(1)
             
-            
-            
         })
         .ignoresSafeArea(edges: isFullScreen ? .all : [])
         .onAppear {
-            contentViewModel.fetchPizzas()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                withAnimation(.bouncy) {
+                    animateOnAppear = true
+                }
+            }
         }
         .onChange(of: currentPizzaIndex) { oldValue, newValue in
             selectedPizzaSize = contentViewModel.pizza[newValue].defaultSize
@@ -172,5 +168,5 @@ struct ProductView: View {
 }
 
 #Preview {
-    ProductView()
+    ProductView(contentViewModel: ContentViewModel())
 }

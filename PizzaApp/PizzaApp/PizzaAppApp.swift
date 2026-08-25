@@ -19,7 +19,7 @@ struct PizzaAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ProductView()
+            PreloaderView()
         }
     }
 }

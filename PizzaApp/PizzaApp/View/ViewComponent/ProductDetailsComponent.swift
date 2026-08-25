@@ -14,7 +14,7 @@ struct ProductDetailsComponent: View {
     var pizza: Pizza
     
     @State private var selectedNumberOfProduct: Int = 1
-
+    
     var body: some View {
         VStack {
             if let price {
@@ -23,14 +23,18 @@ struct ProductDetailsComponent: View {
                         .font(FontEnum.regular14.font)
                         .multilineTextAlignment(.leading)
                         .lineSpacing(8)
+                        .padding(.vertical)
                 }
                 
                 HStack {
                     
                     HStack(spacing: 0) {
                         Text("\(selectedNumberOfProduct)")
-                            .frame(height: 45)
-                            .padding(.horizontal, 60)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.6)
+                            .frame(width: 130, height: 45)
+                            .background(ColorEnum.highlight.color)
+                            .clipShape(Capsule())
                     }
                     .background(ColorEnum.highlight.color)
                     .clipShape(Capsule())
@@ -45,12 +49,14 @@ struct ProductDetailsComponent: View {
                     }
                     .overlay(alignment: .trailing) {
                         Button {
-                            selectedNumberOfProduct += 1
+                            if (selectedNumberOfProduct < 100){
+                                selectedNumberOfProduct += 1
+                            }
                         } label: {
                             CircularButtonLabel(content: Image(IconEnum.plus.rawValue))
                         }
                     }
-                  
+                    
                     Text("$\(String(format: "%.2f", Double(selectedNumberOfProduct) * price))")
                         .frame(maxWidth: .infinity)
                     Button {
