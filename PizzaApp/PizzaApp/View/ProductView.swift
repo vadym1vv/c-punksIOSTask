@@ -11,9 +11,8 @@ struct ProductView: View {
     @StateObject private var contentViewModel: ContentViewModel = ContentViewModel()
     
     @State private var currentPizzaIndex: Int = 0
-//    @State private var selectedPizzaSize: PizzaVariant? = nil
-    @State private var selectedPizzaSize: PizzaSize? = .small
-    @State private var isShowingDetails: Bool = false
+    @State private var selectedPizzaSize: PizzaSize? = .medium
+    @State private var isFullScreen: Bool = false
     
     var currentPizza: Pizza? {
         if (!contentViewModel.pizza.isEmpty && contentViewModel.pizza.count > currentPizzaIndex) {
@@ -32,62 +31,90 @@ struct ProductView: View {
         VStack(spacing: 0) {
             if let pizza = currentPizza?.name {
                 
-               
-                    VStack {
-                        ZStack(alignment: .top) {
-                            TopBarNavigationComponent(
-                                isVisible: isShowingDetails,
-
-                                leadingView: Button {
-                                } label: {
-                                    CircularButtonLabel(
-                                        content: Image(IconEnum.arrowLeft.rawValue)
-                                    )
-                                },
-
-                                centerView: VStack(spacing: 0) {
-                                    Text("Pizzas")
-                                        .font(FontEnum.regular10.font)
-
-                                    Text(pizza)
-                                        .font(FontEnum.semibold24.font)
-                                },
-
-                                trailingView: Button {
-                                } label: {
-                                    CircularButtonLabel(
-                                        content: Image(IconEnum.selected.rawValue)
-                                    )
-                                }
-                            )
-                        }
-                        .animation(.bouncy, value: isShowingDetails)
-                        PizzaImgPreviewComponent(currentIndex: $currentPizzaIndex, contentViewModel: contentViewModel)
-                        Spacer()
-                    }
-
                 
-                    VStack {
-                        
-                        if let currentPizza, isShowingDetails {
-                            ProductDetailsComponent(price: selectedPizzaVariant?.price, pizza: currentPizza)
-                                .frame(height: UIScreen.main.bounds.height / 3)
-                                .padding()
-                                .transition(.move(edge: .bottom))
-                        }
+                VStack {
+                    ZStack(alignment: .top) {
+                        TopBarNavigationComponent(
+                            isVisible: !isFullScreen,
+                            
+                            leadingView: Button {
+                            } label: {
+                                CircularButtonLabel(
+                                    content: Image(IconEnum.arrowLeft.rawValue)
+                                )
+                            },
+                            
+                            centerView: VStack(spacing: 0) {
+                                Text("Pizzas")
+                                    .font(FontEnum.regular10.font)
+                                
+                                Text(pizza)
+                                    .font(FontEnum.semibold24.font)
+                            },
+                            
+                            trailingView: Button {
+                            } label: {
+                                CircularButtonLabel(
+                                    content: Image(IconEnum.selected.rawValue)
+                                )
+                            }
+                        )
                     }
+                    
+                }
+                
+                if !isFullScreen {
+                    Spacer()
+                }
+                
+                PizzaImgPreviewComponent(
+                    currentIndex: $currentPizzaIndex,
+                    isFullScreen: $isFullScreen,
+                    selectedPizzaSize: selectedPizzaSize, contentViewModel: contentViewModel
+                )
+                .padding(.bottom)
+                
+                
+                
+                if !isFullScreen {
+                    Spacer()
+                }
+                VStack {
+                    if !isFullScreen {
+                        Image(IconEnum.bananaForScale.rawValue)
+                            .padding(.bottom)
+                            .transition(
+                                .asymmetric(
+                                    insertion: .move(edge: .bottom).combined(with: .opacity),
+                                    removal: .opacity.combined(with: .move(edge: .bottom))
+                                )
+                            )
+                    }
+                }
+                .animation(.snappy(duration: 0.3), value: isFullScreen)
+                
+            }
+            
+            VStack {
+                if let currentPizza, !isFullScreen {
+                    ProductDetailsComponent(price: selectedPizzaVariant?.price, pizza: currentPizza)
+                        .frame(height: UIScreen.main.bounds.height / 3)
+                        .padding()
+                        .transition(.move(edge: .bottom))
+                }
                 
             }
         }
-        .animation(.bouncy, value: isShowingDetails)
+        .animation(.bouncy, value: isFullScreen)
         .foregroundStyle(ColorEnum.active.color)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(ZStack(alignment: .top) {
             ColorEnum.bg.color
+            
             Circle()
                 .overlay(alignment: .bottom) {
                     HStack(spacing: 0) {
-                        if (isShowingDetails) {
+                        if (!isFullScreen) {
                             HStack(spacing: 0) {
                                 Button {
                                     withAnimation {
@@ -96,18 +123,17 @@ struct ProductView: View {
                                 } label: {
                                     CircularButtonLabel(backgroundEnum: selectedPizzaSize == .small ? ColorEnum.active : ColorEnum.bg, foregroundStyleEnum: selectedPizzaSize == .small ? ColorEnum.bg : ColorEnum.active, showShadow: selectedPizzaSize == .small ? false : true, showBorder: selectedPizzaSize == .small ? true : false, content: Text("S")
                                         .font(FontEnum.semibold18.font)
-                                        )
+                                    )
                                 }
                                 .offset(x: -70)
                                 Button {
                                     withAnimation {
-                                        isShowingDetails.toggle()
                                         selectedPizzaSize = .medium
                                     }
                                 } label: {
                                     CircularButtonLabel(backgroundEnum: selectedPizzaSize == .medium ? ColorEnum.active : ColorEnum.bg, foregroundStyleEnum: selectedPizzaSize == .medium ? ColorEnum.bg : ColorEnum.active, showShadow: selectedPizzaSize == .medium ? false : true, showBorder: selectedPizzaSize == .medium ? true : false, content: Text("M")
                                         .font(FontEnum.semibold18.font)
-                                        )
+                                    )
                                 }
                                 .offset(y: 15)
                                 
@@ -118,34 +144,26 @@ struct ProductView: View {
                                 } label: {
                                     CircularButtonLabel(backgroundEnum: selectedPizzaSize == .large ? ColorEnum.active : ColorEnum.bg, foregroundStyleEnum: selectedPizzaSize == .large ? ColorEnum.bg : ColorEnum.active, showShadow: selectedPizzaSize == .large ? false : true, showBorder: selectedPizzaSize == .large ? true : false, content: Text("L")
                                         .font(FontEnum.semibold18.font)
-                                        )
+                                    )
                                 }
                                 .offset(x: 70)
                             }
                             .transition(.move(edge: .bottom))
                         }
                     }
-                    .animation(.bouncy, value: isShowingDetails)
+                    .animation(.bouncy, value: isFullScreen)
                 }
-               .frame(width: 607, height: 607)
-               .foregroundStyle(ColorEnum.highlight.color)
-               .offset(y: -150)
-              
+                .frame(width: 607, height: 607)
+                .foregroundStyle(ColorEnum.highlight.color)
+                .offset(y: -150)
+                .zIndex(1)
             
-            VStack {
-                
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 300)
-            .background(ColorEnum.highlight.color)
+            
             
         })
-        .background(ignoresSafeAreaEdges: .top)
+        .ignoresSafeArea(edges: isFullScreen ? .all : [])
         .onAppear {
             contentViewModel.fetchPizzas()
-           
-                isShowingDetails = true
-            
         }
         .onChange(of: currentPizzaIndex) { oldValue, newValue in
             selectedPizzaSize = contentViewModel.pizza[newValue].defaultSize

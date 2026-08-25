@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 import SwiftUI
 
 struct TopBarNavigationComponent<
@@ -14,51 +13,51 @@ struct TopBarNavigationComponent<
     CenterView: View,
     TrailingView: View
 >: View {
-
+    
     let isVisible: Bool
-
+    
     let leadingView: LeadingView
     let centerView: CenterView
     let trailingView: TrailingView
-
+    
     var body: some View {
         ZStack {
             if isVisible {
                 centerView
                     .transition(
                         .asymmetric(
-                            insertion: .move(edge: .top),
-                            removal: .move(edge: .top)
+                            insertion: .move(edge: .top).combined(with: .opacity),
+                            removal: .move(edge: .top).combined(with: .opacity)
                         )
                     )
             }
-
+            
             HStack {
                 if isVisible {
                     leadingView
                         .transition(
                             .asymmetric(
-                                insertion: .move(edge: .leading),
-                                removal: .move(edge: .leading)
+                                insertion: .move(edge: .leading).combined(with: .opacity),
+                                removal: .move(edge: .leading).combined(with: .opacity)
                             )
                         )
                 }
-
+                
                 Spacer()
-
+                
                 if isVisible {
                     trailingView
                         .transition(
                             .asymmetric(
-                                insertion: .move(edge: .trailing),
-                                removal: .move(edge: .trailing)
+                                insertion: .move(edge: .trailing).combined(with: .opacity),
+                                removal: .move(edge: .trailing).combined(with: .opacity)
                             )
                         )
                 }
             }
             .padding()
         }
-        .animation(.bouncy, value: isVisible)
+        .animation(.snappy(duration: 0.25), value: isVisible)
     }
 }
 
@@ -69,4 +68,3 @@ struct TopBarNavigationComponent<
         Spacer()
     }
 }
-
