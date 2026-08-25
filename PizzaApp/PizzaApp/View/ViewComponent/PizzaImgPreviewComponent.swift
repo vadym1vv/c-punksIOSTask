@@ -75,11 +75,12 @@ struct PizzaImgPreviewComponent: View {
                     width: width
                 )
             )
+            
             .zIndex(
                 position == 0 ? 1 : 0
             )
             .animation(
-                .easeInOut(duration: 0.35),
+                .bouncy,
                 value: currentIndex
             )
         )

@@ -9,33 +9,62 @@ import Foundation
 
 import SwiftUI
 
-struct TopBarNavigationComponent<LeadingView: View, CenterView: View, TrailingView: View>: View {
-    
-    var leadingView: LeadingView
-    var centerView: CenterView
-    var trailingView: TrailingView
-    
+struct TopBarNavigationComponent<
+    LeadingView: View,
+    CenterView: View,
+    TrailingView: View
+>: View {
+
+    let isVisible: Bool
+
+    let leadingView: LeadingView
+    let centerView: CenterView
+    let trailingView: TrailingView
+
     var body: some View {
-        VStack(spacing: 0) {
+        ZStack {
+            if isVisible {
+                centerView
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: .top),
+                            removal: .move(edge: .top)
+                        )
+                    )
+            }
+
             HStack {
-                ZStack {
-                    centerView
-                        .padding(.horizontal, UIScreen.main.bounds.width / 7)
-                    HStack {
-                        leadingView
-                        Spacer()
-                        trailingView
-                    }
-                    .padding()
+                if isVisible {
+                    leadingView
+                        .transition(
+                            .asymmetric(
+                                insertion: .move(edge: .leading),
+                                removal: .move(edge: .leading)
+                            )
+                        )
+                }
+
+                Spacer()
+
+                if isVisible {
+                    trailingView
+                        .transition(
+                            .asymmetric(
+                                insertion: .move(edge: .trailing),
+                                removal: .move(edge: .trailing)
+                            )
+                        )
                 }
             }
+            .padding()
         }
+        .animation(.bouncy, value: isVisible)
     }
 }
 
 #Preview {
     VStack {
-        TopBarNavigationComponent(leadingView: Text("Leading text"), centerView: Text("lorem")
+        TopBarNavigationComponent(isVisible: false, leadingView: Text("Leading text"), centerView: Text("lorem")
             .frame(maxWidth: .infinity), trailingView: Text("Trailing text"))
         Spacer()
     }
